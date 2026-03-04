@@ -65,7 +65,7 @@ def mv1pmf_skel(dataset, check_repro=True, args=None):
         kp3ds = smooth_skeleton(kp3ds, args.smooth3d)
     for nf in tqdm(range(len(kp3ds)), desc='dump'):
         dataset.write_keypoints3d(kp3ds[nf], nf+start)
-    if args.vis_repro:
+    if args.vis_repro and args.compose_video:
         compose_video(join(args.out, 'repro'), join(args.out, 'repro.mp4'))
 
 def mv1pmf_smpl(dataset, args, weight_pose=None, weight_shape=None):
@@ -110,9 +110,9 @@ def mv1pmf_smpl(dataset, args, weight_pose=None, weight_shape=None):
             kpts_repro = projectN3(keypoints, dataset.Pall)
             dataset.vis_repro(images, kpts_repro, nf=nf, sub_vis=args.sub_vis, mode='repro_smpl')
     # compose rendered images into video
-    if args.vis_smpl:
+    if args.vis_smpl and args.compose_video:
         compose_video(join(args.out, 'smpl'), join(args.out, 'smpl.mp4'))
-    if args.vis_repro:
+    if args.vis_repro and args.compose_video:
         compose_video(join(args.out, 'repro_smpl'), join(args.out, 'repro_smpl.mp4'))
 
 if __name__ == "__main__":
@@ -120,6 +120,8 @@ if __name__ == "__main__":
     from easymocap.dataset import CONFIG, MV1PMF
     parser = load_parser()
     parser.add_argument('--skel', action='store_true')
+    parser.add_argument('--compose_video', action='store_true',
+        help='Compose rendered images into MP4 videos (disabled by default)')
     args = parse_parser(parser)
     help="""
   Demo code for multiple views and one person:
