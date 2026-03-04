@@ -49,8 +49,10 @@ def load_model(gender='neutral', use_cuda=True, model_type='smpl', skel_type='bo
         body_model = SMPLlayer(join(model_path, 'smpl'), gender=gender, device=device,
             regressor_path=reg_path)
     elif model_type == 'smplh':
-        body_model = SMPLlayer(join(model_path, 'smplh/SMPLH_MALE.pkl'), model_type='smplh', gender=gender, device=device,
-            regressor_path=join(model_path, 'J_regressor_body25_smplh.txt'))
+        body_model = SMPLlayer(join(model_path, 'smplh/SMPLH_{}.pkl'.format(gender.upper())), model_type='smplh', gender=gender, device=device,
+            regressor_path=join(model_path, 'J_regressor_body25_smplh.txt'),
+            num_pca_comps=6, use_pca=True, use_flat_mean=False,
+            mano_path=join(model_path, 'smplh'))
     elif model_type == 'smplx':
         body_model = SMPLlayer(join(model_path, 'smplx/SMPLX_{}.pkl'.format(gender.upper())), model_type='smplx', gender=gender, device=device,
             regressor_path=join(model_path, 'J_regressor_body25_smplx.txt'))
